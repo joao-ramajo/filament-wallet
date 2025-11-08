@@ -12,13 +12,13 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 
 class BankAccountResource extends Resource
@@ -53,16 +53,50 @@ class BankAccountResource extends Resource
                 TextEntry::make('user.name')
                     ->label('User'),
                 TextEntry::make('name'),
-                TextEntry::make('type')
-                    ->badge(),
+                TextEntry::make('type')->badge()->color(fn($state) => match ($state->value) {
+                    'checking' => 'success',
+                    'savings' => 'success',
+                    'credit' => 'warning',
+                })->formatStateUsing(fn($state) => $state->label()),
                 TextEntry::make('balance')
-                    ->numeric(),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                    ->label('Current Balance')
+                    ->money('BRL', locale: 'pt_BR'),
+                // 👇 Novo bloco: últimas 10 transações
+                RepeatableEntry::make('recent_expenses')
+                    ->label('Recent Transactions')
+                    ->schema([
+                        TextEntry::make('title')
+                            ->label('Title')
+                            ->limit(30),
+                        TextEntry::make('type')
+                            ->badge()
+                            ->color(fn($state) => $state === 'income' ? 'success' : 'danger'),
+                        TextEntry::make('amount')
+                            ->label('Value')
+                            ->formatStateUsing(fn($state) => 'R$ ' . number_format($state / 100, 2, ',', '.')),
+                        TextEntry::make('status')
+                            ->badge()
+                            ->color(fn($state) => match ($state) {
+                                'paid' => 'success',
+                                'pending' => 'warning',
+                                'overdue' => 'danger',
+                                default => 'gray',
+                            }),
+                        TextEntry::make('payment_date')
+                            ->label('Payment Date')
+                            ->date('d/m/Y'),
+                    ])
+                    ->columns(5)
+                    ->state(fn($record) =>
+                        $record
+                            ->expenses()
+                            ->latest('payment_date')
+                            ->take(10)
+                            ->get()
+                            ->toArray())
+                    ->visible(fn($record) => $record->expenses()->exists())->columnSpanFull(),
+                TextEntry::make('created_at')->dateTime()->placeholder('-'),
+                TextEntry::make('updated_at')->dateTime()->placeholder('-'),
             ]);
     }
 
