@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Expenses\Pages;
 
 use App\Filament\Resources\Expenses\ExpenseResource;
+use App\Models\Expense;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
@@ -23,7 +24,39 @@ class ManageExpenses extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->after(function () {
+                    $userId = Auth::id();
+
+                    $total_income = Expense::where('user_id', $userId)
+                        ->where('type', 'income')
+                        ->where('status', 'pending')->orWhere('status', 'pending')
+                        ->sum('amount');
+                    $total_expenses = Expense::where('user_id', $userId)
+                        ->where('status', 'pending')
+                        ->where('type', 'expense')->orWhere('status', 'pending')
+                        ->sum('amount');
+
+                    $current_balance = $total_income - $total_expenses;
+
+                    if ($current_balance < 1_000_00) {
+                        \Filament\Notifications\Notification::make()
+                            ->title('Low Balance Warning')
+                            ->body('Your account balance is running low. Please monitor your spending.')
+                            ->icon('heroicon-o-exclamation-triangle')
+                            ->iconColor('warning')
+                            ->duration(6000)
+                            ->send();
+                    } elseif ($current_balance < 50000) {
+                        \Filament\Notifications\Notification::make()
+                            ->title('Critical Balance Alert')
+                            ->body('Your balance has reached a critical level. Immediate attention is required.')
+                            ->icon('heroicon-o-bolt')
+                            ->iconColor('danger')
+                            ->duration(8000)
+                            ->send();
+                    }
+                }),
             Action::make('toggle-values')
                 ->label($this->hideValues ? 'Show values' : 'Hide values')
                 ->icon($this->hideValues ? 'heroicon-m-eye' : 'heroicon-m-eye-slash')

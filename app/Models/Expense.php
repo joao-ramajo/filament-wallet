@@ -18,6 +18,7 @@ class Expense extends Model
         'status',
         'type',
         'payment_date',
+        'bank_account_id'
     ];
 
     protected $casts = [
