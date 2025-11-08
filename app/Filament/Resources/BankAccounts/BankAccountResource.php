@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\BankAccounts;
 
-use App\BankAccountType;
 use App\Filament\Resources\BankAccounts\Pages\ManageBankAccounts;
 use App\Models\BankAccount;
-use BackedEnum;
+use App\BankAccountType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -20,6 +19,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use BackedEnum;
 
 class BankAccountResource extends Resource
 {
@@ -75,12 +75,19 @@ class BankAccountResource extends Resource
                     ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('type')
-                    ->badge()
-                    ->searchable(),
+                TextColumn::make('type')->badge()->color(fn($state) => match ($state->value) {
+                    'checking' => 'success',
+                    'savings' => 'success',
+                    'credit' => 'warning',
+                })->formatStateUsing(fn($state) => $state->label()),
                 TextColumn::make('balance')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Balance')
+                    ->sortable()
+                    ->alignRight()
+                    ->formatStateUsing(fn($state) =>
+                        $state !== null
+                            ? 'R$ ' . number_format((float) $state, 2, ',', '.')
+                            : '-'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
