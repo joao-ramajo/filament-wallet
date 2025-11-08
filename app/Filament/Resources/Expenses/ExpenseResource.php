@@ -137,13 +137,36 @@ class ExpenseResource extends Resource
                         'info' => 'income',
                         'gray' => 'expense',
                     ]),
+                // TextColumn::make('bankAccount.name')
+                //     ->label('Bank Account')
+                //     ->sortable(),
                 TextColumn::make('bankAccount.name')
-                    ->label('Bank Account')
+                    ->label('Bank')
+                    ->formatStateUsing(function ($state) {
+                        $lower = strtolower($state);
+                        $icon = match (true) {
+                            str_contains($lower, 'nubank') => '/images/banks/nubank.png',
+                            str_contains($lower, 'inter') => '/images/banks/inter.png',
+                            str_contains($lower, 'next') => '/images/banks/next.png',
+                            str_contains($lower, 'bradesco') => '/images/banks/bradesco.png',
+                            str_contains($lower, 'itau') => '/images/banks/itau.png',
+                            str_contains($lower, 'santander') => '/images/banks/santander.png',
+                            default => '/images/banks/default.png',
+                        };
+
+                        return "<img src='{$icon}' alt='' style='height:20px;width:20px;display:block;margin:auto;border-radius:4px;margin-left:6px;'>";
+                    })
+                    ->width(60)
+                    ->alignCenter()
+                    ->tooltip(fn ($state) => $state)
+                    ->html()  // importante para renderizar o <img>
                     ->sortable(),
                 TextColumn::make('payment_date')
                     ->label('Payment Date')
                     ->date('d/m/Y H:i:s')
-                    ->sortable()
+                    ->sortable(query: function ($query, $direction) {
+                        $query->orderBy('payment_date', $direction);
+                    })
                     ->color(fn($record) =>
                         $record->status === 'paid'
                             ? 'success'
