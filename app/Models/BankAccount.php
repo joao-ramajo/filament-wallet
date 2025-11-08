@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\BankAccountType;
+use App\Enum\BankAccountType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class BankAccount extends Model
@@ -53,7 +53,6 @@ class BankAccount extends Model
     {
         return $this->hasMany(Expense::class);
     }
-
 
     protected static function booted(): void
     {

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\BankAccounts;
 
+use App\Enum\BankAccountType;
 use App\Filament\Resources\BankAccounts\Pages\ManageBankAccounts;
 use App\Models\BankAccount;
-use App\BankAccountType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -94,7 +94,8 @@ class BankAccountResource extends Resource
                             ->take(10)
                             ->get()
                             ->toArray())
-                    ->visible(fn($record) => $record->expenses()->exists())->columnSpanFull(),
+                    ->visible(fn($record) => $record->expenses()->exists())
+                    ->columnSpanFull(),
                 TextEntry::make('created_at')->dateTime()->placeholder('-'),
                 TextEntry::make('updated_at')->dateTime()->placeholder('-'),
             ]);
