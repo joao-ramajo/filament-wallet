@@ -67,7 +67,6 @@ class ExpenseResource extends Resource
                     ->displayFormat('d/m/Y H:i:s')
                     ->format('Y-m-d H:i:s')
                     ->timezone('America/Sao_Paulo')
-                    ->default(now())
                     ->native(false)
                     ->seconds(false)
                     ->nullable()
@@ -158,6 +157,7 @@ class ExpenseResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->striped()
             ->recordTitleAttribute('Expenses')
             ->columns([
                 TextColumn::make('title')
@@ -264,6 +264,15 @@ class ExpenseResource extends Resource
                         'expense' => 'expense',
                     ])
                     ->attribute('type'),
+                Filter::make('month')
+                    ->form([
+                        DatePicker::make('from')->label('From'),
+                        DatePicker::make('to')->label('To'),
+                    ])
+                    ->query(fn($query, array $data) =>
+                        $query
+                            ->when($data['from'], fn($q, $date) => $q->whereDate('payment_date', '>=', $date))
+                            ->when($data['to'], fn($q, $date) => $q->whereDate('payment_date', '<=', $date)))
             ])
             ->deferFilters(false)
             ->recordActions([
