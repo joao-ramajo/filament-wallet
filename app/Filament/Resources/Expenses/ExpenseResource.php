@@ -20,8 +20,12 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -45,61 +49,142 @@ class ExpenseResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('title')
-                    ->required(),
-                TextInput::make('amount')
-                    ->label('Valor (R$)')
-                    ->numeric()
-                    ->step('0.01')
-                    ->inputMode('decimal')
-                    ->placeholder('0,00')
-                    ->required(),
-                Select::make('status')
-                    ->options(['paid' => 'Paid', 'overdue' => 'Overdue', 'pending' => 'Pending'])
-                    ->default('pending')
-                    ->required(),
-                Select::make('type')
-                    ->options(['expense' => 'Expense', 'income' => 'Income'])
-                    ->default('expense')
-                    ->required(),
-                DateTimePicker::make('payment_date')
-                    ->label('Payment Date')
-                    ->displayFormat('d/m/Y H:i:s')
-                    ->format('Y-m-d H:i:s')
-                    ->timezone('America/Sao_Paulo')
-                    ->native(false)
-                    ->seconds(false)
-                    ->nullable()
-                    ->closeOnDateSelection(),
-                DatePicker::make('due_date')
-                    ->label('Due Date')
-                    ->displayFormat('d/m/Y')
-                    ->format('Y-m-d')
-                    ->timezone('America/Sao_Paulo')
-                    ->native(false)
-                    ->nullable()
-                    ->closeOnDateSelection(),
-                Select::make('category_id')
-                    ->label('Categoria')
-                    ->options(fn() => \App\Models\Category::query()
-                        ->where(function ($query) {
-                            $query
+                // Main Section - Basic Information
+                Section::make('Basic Information')
+                    ->description('Main transaction details')
+                    ->schema([
+                        // Type - First to influence other fields
+                        ToggleButtons::make('type')
+                            ->label('Type')
+                            ->options([
+                                'expense' => 'Expense',
+                                'income' => 'Income'
+                            ])
+                            ->icons([
+                                'expense' => 'heroicon-o-arrow-trending-down',
+                                'income' => 'heroicon-o-arrow-trending-up'
+                            ])
+                            ->colors([
+                                'expense' => 'danger',
+                                'income' => 'success'
+                            ])
+                            ->inline()
+                            ->default('expense')
+                            ->required()
+                            ->live(),
+                        TextInput::make('title')
+                            ->label('Description')
+                            ->placeholder('Ex: Electric bill, Salary, Groceries...')
+                            ->required()
+                            ->maxLength(255)
+                            ->autocomplete('off'),
+                        TextInput::make('amount')
+                            ->label('Amount (R$)')
+                            ->numeric()
+                            ->prefix('R$')
+                            ->inputMode('decimal')
+                            ->placeholder('0.00')
+                            ->required()
+                            ->minValue(0.01)
+                            ->step(0.01)
+                            ->helperText('Use dot as decimal separator'),
+                        Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'paid' => 'Paid',
+                                'pending' => 'Pending',
+                                'overdue' => 'Overdue'
+                            ])
+                            ->default('pending')
+                            ->required()
+                            ->native(false)
+                            ->live(),
+                    ]),
+                // Categorization Section
+                Section::make('Categorization')
+                    ->description('Organize your transactions')
+                    ->schema([
+                        Select::make('category_id')
+                            ->label('Category')
+                            ->options(fn() => \App\Models\Category::query()
+                                ->where(function ($query) {
+                                    $query
+                                        ->where('user_id', Auth::id())
+                                        ->orWhereNull('user_id');
+                                })
+                                ->orderBy('name')
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->native(false)
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->label('Category Name')
+                                    ->required(),
+                            ])
+                            ->createOptionModalHeading('New Category')
+                            ->placeholder('Select or create a category')
+                            ->helperText('Categories help organize your expenses'),
+                        Select::make('bank_account_id')
+                            ->label('Bank Account')
+                            ->options(fn() => BankAccount::query()
                                 ->where('user_id', Auth::id())
-                                ->orWhereNull('user_id');  // categorias padrão
-                        })
-                        ->orderBy('name')
-                        ->pluck('name', 'id'))
-                    ->searchable()
-                    ->required(false)
-                    ->nullable(),
-                Select::make('bank_account_id')
-                    ->label('Bank Account')
-                    ->options(fn() => BankAccount::query()
-                        ->where('user_id', Auth::id())
-                        ->orderBy('name')
-                        ->pluck('name', 'id'))
-                    ->nullable()
-                    ->required(false),
+                                ->orderBy('name')
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->native(false)
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->label('Account Name')
+                                    ->required()
+                                    ->placeholder('Ex: Nubank, Itaú...'),
+                                TextInput::make('initial_balance')
+                                    ->label('Initial Balance')
+                                    ->numeric()
+                                    ->prefix('R$')
+                                    ->default(0)
+                            ])
+                            ->createOptionModalHeading('New Bank Account')
+                            ->placeholder('Select an account (optional)')
+                            ->helperText('Leave blank for cash/other'),
+                    ])
+                    ->collapsible(),
+                // Dates Section - Conditional and Intelligent
+                Section::make('Dates')
+                    ->description('When the transaction occurred or will occur')
+                    ->schema([
+                        DatePicker::make('payment_date')
+                            ->label(fn(Get $get) =>
+                                $get('status') === 'paid'
+                                    ? 'Payment Date'
+                                    : 'Expected Payment Date')
+                            ->displayFormat('d/m/Y')
+                            ->format('Y-m-d')
+                            ->native(false)
+                            ->closeOnDateSelection()
+                            ->default(now())
+                            ->helperText(fn(Get $get) =>
+                                $get('status') === 'paid'
+                                    ? 'Date when payment was made'
+                                    : 'Expected date of payment')
+                            ->visible(fn(Get $get) =>
+                                in_array($get('status'), ['paid', 'pending'])),
+                        DatePicker::make('due_date')
+                            ->label('Due Date')
+                            ->displayFormat('d/m/Y')
+                            ->format('Y-m-d')
+                            ->native(false)
+                            ->closeOnDateSelection()
+                            ->helperText('When the bill is due')
+                            ->visible(fn(Get $get) =>
+                                $get('type') === 'expense' &&
+                                in_array($get('status'), ['pending', 'overdue']))
+                            ->nullable(),
+                    ])
+                    ->collapsible()
+                    ->collapsed(),
+                // Hidden field for user_id
                 Hidden::make('user_id')
                     ->default(fn() => Auth::id())
             ]);
@@ -201,6 +286,13 @@ class ExpenseResource extends Resource
                         'info' => 'income',
                         'gray' => 'expense',
                     ]),
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('Uncategorized')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('bankAccount.name')
                     ->label('Bank')
                     ->formatStateUsing(function ($state) {
@@ -339,10 +431,17 @@ class ExpenseResource extends Resource
         ];
     }
 
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()
+    //         ->where('user_id', Auth::id());
+    //     // ou: ->whereBelongsTo(Auth::user());
+    // }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->where('user_id', Auth::id());
-        // ou: ->whereBelongsTo(Auth::user());
+            // Especifica a tabela expenses para evitar ambiguidade
+            ->where('expenses.user_id', Auth::id());
     }
 }
