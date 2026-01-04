@@ -410,6 +410,7 @@ class ExpenseResource extends Resource
                 ]),
                 Action::make('export')
                     ->label('Exportar')
+                    ->color('primary')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->modalHeading('Exportar finanças')
                     ->modalSubheading('Selecione o tipo de arquivo desejado')
@@ -438,8 +439,7 @@ class ExpenseResource extends Resource
 
     public static function getWidgets(): array
     {
-        return [
-        ];
+        return [];
     }
 
     public static function getEloquentQuery(): Builder
