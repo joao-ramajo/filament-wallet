@@ -18,11 +18,7 @@ class ExportService
 
         $type = $request->get('type') ?? 'csv';
 
-        $final = app($mapper[$type]) ?? null;
-
-        if(!$final){
-            throw new \Exception('Tipo de exportação ainda não implementado.');
-        }
+        $final = app($mapper[$type]);
 
         return $final->execute();
     }

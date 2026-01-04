@@ -74,6 +74,7 @@ class BankAccountResource extends Resource
                         'checking' => 'success',
                         'savings' => 'info',
                         'credit' => 'warning',
+                        default => 'secondary',
                     })
                     ->formatStateUsing(fn($state) => $state->label()),
                 TextEntry::make('balance')
@@ -155,6 +156,7 @@ class BankAccountResource extends Resource
                         'checking' => 'success',
                         'savings' => 'info',
                         'credit' => 'warning',
+                        default => 'secondary',
                     })
                     ->formatStateUsing(fn($state) => $state->label())
                     ->sortable(),

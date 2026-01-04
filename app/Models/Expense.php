@@ -37,7 +37,6 @@ class Expense extends Model
 
     public function getAmountAttribute($value)
     {
-        // Exibe o valor em reais no painel
         return $value / 100;
     }
 
@@ -52,7 +51,7 @@ class Expense extends Model
         $clean = preg_replace('/[^\d.,]/', '', $value);
         $clean = str_replace(',', '.', $clean);
 
-        $this->attributes['amount'] = (int) round($clean * 100);
+        $this->attributes['amount'] = (int) round((int) $clean * 100);
     }
 
     protected static function booted()

@@ -37,7 +37,7 @@ class BankAccount extends Model
         $income = $this->expenses()->where('user_id', $user_id)->where('type', 'income')->where('status', 'paid')->sum('amount');
         $expense = $this->expenses()->where('user_id', $user_id)->where('type', 'expense')->where('status', 'paid')->sum('amount');
 
-        return ($income - $expense) / 100;
+        return ((int) $income - (int) $expense) / 100;
     }
 
     public function setBalanceAttribute($value): void
@@ -46,7 +46,7 @@ class BankAccount extends Model
         $clean = preg_replace('/[^\d.,]/', '', $value);
         $clean = str_replace(',', '.', $clean);
 
-        $this->attributes['balance'] = (int) round($clean * 100);
+        $this->attributes['balance'] = (int) round((int) $clean * 100);
     }
 
     public function expenses(): HasMany
