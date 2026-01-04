@@ -27,7 +27,7 @@ class BankAccountResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Bank Account';
+    protected static ?string $recordTitleAttribute = 'Contas Bancárias';
 
     public static function form(Schema $schema): Schema
     {

@@ -17,7 +17,7 @@ class ManageExpenses extends ManageRecords
 
     public function getTitle(): string
     {
-        return 'Expenses';
+        return 'Finanças';
     }
 
     protected function getHeaderActions(): array
@@ -41,16 +41,16 @@ class ManageExpenses extends ManageRecords
 
                     if ($current_balance < 100_000) {
                         \Filament\Notifications\Notification::make()
-                            ->title('Low Balance Warning')
-                            ->body('Your account balance is running low. Please monitor your spending.')
+                            ->title('Alerta de saldo baixo')
+                            ->body('O saldo da sua conta está ficando baixo. Por favor, acompanhe seus gastos.')
                             ->icon('heroicon-o-exclamation-triangle')
                             ->iconColor('warning')
                             ->duration(6000)
                             ->send();
                     } elseif ($current_balance < 50000) {
                         \Filament\Notifications\Notification::make()
-                            ->title('Critical Balance Alert')
-                            ->body('Your balance has reached a critical level. Immediate attention is required.')
+                            ->title('Alerta de saldo crítico')
+                            ->body('Seu saldo atingiu um nível crítico. É necessária atenção imediata.')
                             ->icon('heroicon-o-bolt')
                             ->iconColor('danger')
                             ->duration(8000)
@@ -58,7 +58,7 @@ class ManageExpenses extends ManageRecords
                     }
                 }),
             Action::make('toggle-values')
-                ->label($this->hideValues ? 'Show values' : 'Hide values')
+                ->label($this->hideValues ? 'Esconder valores' : 'Mostrar valores')
                 ->icon($this->hideValues ? 'heroicon-m-eye' : 'heroicon-m-eye-slash')
                 ->button()
                 ->color('gray')
