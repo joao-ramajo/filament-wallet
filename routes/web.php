@@ -26,7 +26,7 @@ Route::get('termos-e-condicoes', function () {
 
 Route::get('example', function () {
     return view('example');
-});
+})->name('web.dashboard');
 
 Route::prefix('api')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('api.login');

@@ -22,7 +22,7 @@
             </div>
 
             <!-- Dashboard Button -->
-            <a href="{{ route('filament.admin.pages.wallet-dashboard') }}"
+            <a href="{{ route('web.dashboard') }}"
                 class="bg-lime-400 text-zinc-950 px-6 py-3 font-black uppercase shadow-[4px_4px_0_0_#000] hover:shadow-[2px_2px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-200">
                 Minha Carteira
             </a>
@@ -85,7 +85,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('filament.admin.pages.wallet-dashboard') }}"
+                <a href="{{ route('web.dashboard') }}"
                     class="bg-lime-400 text-zinc-950 px-6 py-4 font-black uppercase text-center shadow-[6px_6px_0_0_#000]">
                     Minha Carteira
                 </a>

@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Filament Wallet</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+<x-layout.main-layout title="Dashboard">
     <div class="min-h-screen relative overflow-hidden">
 
         <!-- Background brutal shapes -->
@@ -19,22 +9,13 @@
         </div>
 
         <!-- Header -->
-        <header class="relative z-10 px-6 py-6 flex items-center justify-between border-b border-zinc-800">
-            <a href="{{ route('web.home') }}">
-                <h1 class="text-2xl font-black tracking-tight uppercase flex items-center gap-4">
-                    <img src="{{ asset('assets/img/logo.svg') }}" alt="Filament Wallet Logo" class="w-[300px] ">
-                </h1>
-
-            </a>
-            <a href="{{ route('filament.admin.pages.wallet-dashboard') }}"
-                class="bg-zinc-100 text-zinc-950 px-5 py-2 font-bold uppercase hover:translate-x-1 hover:-translate-y-1 transition">Entrar</a>
-        </header>
+        <x-layout.header />
 
 
         <!-- Financial Summary -->
         <!-- Financial Summary -->
         <section class="relative z-10 px-6 py-16">
-            <h2 class="text-4xl font-black uppercase mb-8">Resumo Financeiro</h2>
+            <h2 class="text-4xl font-black text-white uppercase mb-8">Resumo Financeiro</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="border-4 border-zinc-100 p-6 bg-zinc-900 shadow-[12px_12px_0_0_#000]">
                     <p class="font-bold uppercase text-zinc-300">Total Recebido</p>
@@ -62,7 +43,7 @@
         <!-- Expenses List -->
         <section class="relative z-10 px-6 py-16">
             <div class="flex items-center justify-between mb-6">
-                <h3 class="text-3xl font-black uppercase">Despesas Recentes</h3>
+                <h3 class="text-3xl font-black text-white uppercase">Despesas Recentes</h3>
                 <button
                     class="bg-lime-400 text-zinc-950 px-6 py-3 font-black uppercase shadow-[6px_6px_0_0_#000] hover:shadow-[2px_2px_0_0_#000] transition">
                     + Nova Despesa
@@ -108,10 +89,6 @@
         </section>
 
         <!-- Footer -->
-        <footer class="relative z-10 px-6 py-10 border-t border-zinc-800 text-sm text-zinc-500 text-center">
-            Filament Wallet © {{ date('Y') }} — Controle financeiro sem complicação.
-        </footer>
+        <x-layout.footer />
     </div>
-</body>
-
-</html>
+</x-layout.main-layout>
