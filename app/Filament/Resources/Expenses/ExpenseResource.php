@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Expenses;
 use App\Filament\Resources\Expenses\Pages\ManageExpenses;
 use App\Filament\Resources\Expenses\Widgets\MyWidget;
 use App\Filament\Resources\Expenses\Widgets\TotalExpensesOverview;
+use App\Filament\Widgets\ExpensesByCategoryChart;
 use App\Models\BankAccount;
 use App\Models\Expense;
 use Filament\Actions\Action;
@@ -316,7 +317,7 @@ class ExpenseResource extends Resource
                     ->sortable(),
                 TextColumn::make('payment_date')
                     ->label('Payment Date')
-                    ->date('d/m/Y H:i:s')
+                    ->date('d/m/Y')
                     ->sortable(query: function ($query, $direction) {
                         $query->orderBy('payment_date', $direction);
                     })
@@ -414,6 +415,25 @@ class ExpenseResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+                Action::make('export')
+                    ->label('Export')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->modalHeading('Export expense data')
+                    ->modalSubheading('Select a file type')
+                    ->modalWidth('md')
+                    ->form([
+                        Select::make('type')
+                            ->label('Files type')
+                            ->options([
+                                'csv' => 'CSV',
+                                'xlsx' => 'XLSX',
+                                // 'pdf' => 'PDF',
+                            ])
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+                        return redirect()->route('web.export', ['type' => $data['type']]);
+                    }),
             ]);
     }
 
@@ -430,13 +450,6 @@ class ExpenseResource extends Resource
             // TotalExpensesOverview::class,
         ];
     }
-
-    // public static function getEloquentQuery(): Builder
-    // {
-    //     return parent::getEloquentQuery()
-    //         ->where('user_id', Auth::id());
-    //     // ou: ->whereBelongsTo(Auth::user());
-    // }
 
     public static function getEloquentQuery(): Builder
     {
