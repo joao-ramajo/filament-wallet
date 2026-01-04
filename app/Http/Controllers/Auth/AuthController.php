@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('web.home');
+            return redirect()->route('web.dashboard');
         }
 
         return back()->withErrors([
@@ -55,7 +55,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Redirecionar para dashboard personalizado
-        return redirect()->route('filament.admin.pages.wallet-dashboard');  // ajuste para sua rota
+        return redirect()->route('web.dashboard');  // ajuste para sua rota
     }
 
     public function logout(Request $request)

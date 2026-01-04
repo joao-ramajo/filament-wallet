@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Services\ExportService;
 use Illuminate\Support\Facades\Route;
 
@@ -24,9 +25,7 @@ Route::get('termos-e-condicoes', function () {
     return view('termos-e-condicoes');
 })->name('web.termos-e-condicoes');
 
-Route::get('example', function () {
-    return view('example');
-})->name('web.dashboard');
+Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('web.dashboard');
 
 Route::prefix('api')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('api.login');

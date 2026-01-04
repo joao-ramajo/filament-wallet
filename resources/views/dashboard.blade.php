@@ -19,15 +19,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="border-4 border-zinc-100 p-6 bg-zinc-900 shadow-[12px_12px_0_0_#000]">
                     <p class="font-bold uppercase text-zinc-300">Total Recebido</p>
-                    <p class="text-lime-400 text-2xl font-black mt-2">R$ 12.450</p>
+                    <p class="text-lime-400 text-2xl font-black mt-2">{{ $stats['total_receive'] }}</p>
                 </div>
                 <div class="border-4 border-zinc-100 p-6 bg-zinc-900 shadow-[12px_12px_0_0_#000]">
                     <p class="font-bold uppercase text-zinc-300">Total Gasto</p>
-                    <p class="text-red-400 text-2xl font-black mt-2">R$ 8.320</p>
+                    <p class="text-red-400 text-2xl font-black mt-2">{{ $stats['total_expense']}}</p>
                 </div>
                 <div class="border-4 border-zinc-100 p-6 bg-zinc-900 shadow-[12px_12px_0_0_#000]">
                     <p class="font-bold uppercase text-zinc-300">Saldo Esperado</p>
-                    <p class="text-cyan-400 text-2xl font-black mt-2">R$ 4.130</p>
+                    <p class="text-cyan-400 text-2xl font-black mt-2">{{ $stats['expected_total']}}</p>
                 </div>
             </div>
 
@@ -62,27 +62,15 @@
                         </tr>
                     </thead>
                     <tbody class="text-zinc-200">
-                        <tr class="border-b border-zinc-700 hover:bg-zinc-800 transition">
-                            <td class="px-4 py-2">Aluguel</td>
-                            <td class="px-4 py-2">Moradia</td>
-                            <td class="px-4 py-2">01/01/2026</td>
-                            <td class="px-4 py-2">01/01/2026</td>
-                            <td class="px-4 py-2 text-right text-red-400 font-bold">R$ 1.200</td>
-                        </tr>
-                        <tr class="border-b border-zinc-700 hover:bg-zinc-800 transition">
-                            <td class="px-4 py-2">Freelance Projeto X</td>
-                            <td class="px-4 py-2">Receita</td>
-                            <td class="px-4 py-2">05/01/2026</td>
-                            <td class="px-4 py-2">05/01/2026</td>
-                            <td class="px-4 py-2 text-right text-lime-400 font-bold">R$ 2.500</td>
-                        </tr>
-                        <tr class="border-b border-zinc-700 hover:bg-zinc-800 transition">
-                            <td class="px-4 py-2">Supermercado</td>
-                            <td class="px-4 py-2">Alimentação</td>
-                            <td class="px-4 py-2">03/01/2026</td>
-                            <td class="px-4 py-2">03/01/2026</td>
-                            <td class="px-4 py-2 text-right text-red-400 font-bold">R$ 320</td>
-                        </tr>
+                        @foreach ($expenses as $expense)
+                            <tr class="border-b border-zinc-700 hover:bg-zinc-800 transition">
+                                <td class="px-4 py-2">{{ $expense->title }}</td>
+                                <td class="px-4 py-2">{{ $expense->category}} </td>
+                                <td class="px-4 py-2">{{ $expense->due_date }}</td>
+                                <td class="px-4 py-2">{{ $expense->payment_date }} </td>
+                                <td class="px-4 py-2 text-right text-green-400 font-bold">{{ $expense->amount }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
