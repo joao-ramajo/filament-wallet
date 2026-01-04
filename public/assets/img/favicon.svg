@@ -1,0 +1,27 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient -->
+    <linearGradient id="favGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#84cc16;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#22d3ee;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e879f9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="32" height="32" fill="#09090b"/>
+  
+  <!-- Border -->
+  <rect x="2" y="2" width="28" height="28" fill="none" stroke="#84cc16" stroke-width="2"/>
+  
+  <!-- Inner box -->
+  <rect x="5" y="5" width="22" height="22" fill="#18181b"/>
+  
+  <!-- W Icon -->
+  <path d="M 8,10 L 10.5,10 L 13,19 L 15.5,10 L 18,10 L 20.5,19 L 22,10 L 24,10 L 21.5,22 L 19,22 L 16,13 L 13,22 L 10.5,22 Z" 
+        fill="none" stroke="url(#favGradient)" stroke-width="1.5" stroke-linejoin="miter"/>
+  
+  <!-- Corner accents -->
+  <polygon points="2,2 5,2 2,5" fill="#84cc16"/>
+  <polygon points="30,30 30,27 27,30" fill="#e879f9"/>
+</svg>
