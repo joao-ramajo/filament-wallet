@@ -15,4 +15,12 @@ Route::get('login', function () {
     return view('login');
 })->name('web.login');
 
+Route::get('funcionalidades', function () {
+    return view('features');
+})->name('web.features');
+
+Route::get('example', function () {
+    return view('example');
+});
+
 Route::get('export', [ExportService::class, 'execute'])->name('web.export');
