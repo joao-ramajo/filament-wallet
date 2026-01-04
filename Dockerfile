@@ -49,7 +49,6 @@ ENV PORT=8000
 
 RUN php artisan config:clear
 RUN php artisan view:clear
-RUN php artisan cache:clear
 RUN php artisan route:clear
 
 # Rodar Laravel
