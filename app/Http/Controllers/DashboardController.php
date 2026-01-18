@@ -20,9 +20,12 @@ class DashboardController extends Controller
             ->where('expenses.user_id', $user->id)
             ->orderBy('expenses.created_at', 'desc')
             ->select(
+                'expenses.id',
                 'expenses.title',
                 'categories.name as category',  // nome da categoria, null se não tiver
+                'expenses.category_id',
                 'expenses.amount',
+                'expenses.amount as true_amount',
                 'expenses.payment_date',
                 'expenses.due_date',
                 'expenses.type',
@@ -86,6 +89,12 @@ class DashboardController extends Controller
         $categories = $this->getCategories();
 
         return view('dashboard', compact('expenses', 'stats', 'categories'));
+    }
+
+    public function editAmount(Expense $expense)
+    {
+        $categories = $this->getCategories();
+        return view('expenses.edit', compact('expense', 'categories'));
     }
 
     private function getCategories()

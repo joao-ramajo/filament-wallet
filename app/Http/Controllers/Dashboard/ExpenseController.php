@@ -13,7 +13,7 @@ class ExpenseController extends Controller
 {
     public function __construct(
         protected ImportCsvData $importAction,
-    ){}
+    ) {}
 
     public function create(Request $request)
     {
@@ -48,5 +48,23 @@ class ExpenseController extends Controller
         $result = $this->importAction->execute($request->file('file'));
 
         return back()->with('success', 'Dados importados com sucesso');
+    }
+
+    public function markAsPaid(Expense $expense)
+    {
+        $expense->update([
+            'status' => 'paid'
+        ]);
+
+        return back()->with('success', 'Despesa marcada como paga.');
+    }
+
+    public function markAsPending(Expense $expense)
+    {
+        $expense->update([
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', 'Despesa marcada como pendente.');
     }
 }
