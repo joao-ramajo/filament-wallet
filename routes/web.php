@@ -34,10 +34,15 @@ Route::get('apoie', function () {
     return view('apoie');
 })->name('web.apoie');
 
+Route::get('edit/{expense}', [DashboardController::class, 'editAmount'])->name('web.edit');
+
 Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('web.dashboard');
 
 Route::prefix('api')->group(function () {
     Route::post('expense', [ExpenseController::class, 'create'])->name('api.expense.store');
+    Route::put('expense/{expense}', [ExpenseController::class, 'update'])->name('api.expense.update');
+    Route::put('expense/{expense}/mark-as-paid', [ExpenseController::class, 'markAsPaid'])->name('api.expense.mark-as-paid');
+    Route::put('expense/{expense}/mark-as-pending', [ExpenseController::class, 'markAsPending'])->name('api.expense.mark-as-pending');
     Route::post('login', [AuthController::class, 'login'])->name('api.login');
     Route::post('register', [AuthController::class, 'register'])->name('api.register');
     Route::post('logout', [AuthController::class, 'logout'])->name('api.logout');
