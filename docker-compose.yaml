@@ -42,12 +42,12 @@ services:
       - mysql_data_fillament:/var/lib/mysql
     restart: unless-stopped
 
-  mailhog:
-    image: mailhog/mailhog
-    container_name: fillament-mailhog
-    ports:
-      - "1025:1025"   # SMTP
-      - "8025:8025"   # Web UI
+  queue:
+    container_name: fillament-queue
+    build: .
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=60
+    volumes:
+      - .:/var/www
     restart: unless-stopped
 
 volumes:
