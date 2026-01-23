@@ -43,13 +43,19 @@ services:
     restart: unless-stopped
 
   queue:
-    container_name: fillament-queue
     build:
       context: .
       dockerfile: docker/php/Dockerfile
+    container_name: fillament-queue
     command: php artisan queue:work --sleep=3 --tries=3 --timeout=60
     volumes:
-      - .:/var/www
+      - app_public:/var/www/public
+      - ./.env:/var/www/.env
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - app
     restart: unless-stopped
 
 volumes:
