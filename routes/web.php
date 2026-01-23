@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\ExpenseController;
 use App\Http\Controllers\DashboardController;
 use App\Services\ExportService;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,3 +46,14 @@ Route::prefix('api')->group(function () {
 });
 
 Route::get('export', [ExportService::class, 'execute'])->name('web.export');
+
+Route::get('/teste-email', function () {
+    $toEmail = 'joaoramajo744@gmail.com';
+
+    Mail::raw('Olá! Este é um email de teste enviado pelo Laravel.', function ($message) use ($toEmail) {
+        $message->to($toEmail)
+                ->subject('Teste de Email Laravel');
+    });
+
+    return 'Email de teste enviado!';
+});
