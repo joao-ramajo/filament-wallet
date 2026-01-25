@@ -1,6 +1,10 @@
 <x-layout.main-layout title="Dashboard">
     <div class="min-h-screen relative overflow-hidden">
 
+    @if (session('success'))
+        <x-utils.success-toast :message="session('success')" />
+    @endif
+
         <!-- Background brutal shapes -->
         <div class="pointer-events-none fixed inset-0">
             <div class="absolute -top-32 -left-32 w-[40rem] h-[40rem] bg-lime-500/20 rotate-12"></div>
@@ -200,7 +204,7 @@
 
                         <h4 class="text-2xl font-black uppercase text-white mb-6">Nova Despesa / Entrada</h4>
 
-                        <form action="{{ route('api.expense.store') }}" method="POST">
+                        <form action="{{ route('web.expense.store') }}" method="POST">
                             @csrf
                             <!-- Título -->
                             <div class="mb-4">
