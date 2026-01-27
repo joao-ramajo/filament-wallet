@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\ExpenseController;
 use App\Http\Controllers\Expense\CreateExpenseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Expense\DeleteExpenseController;
 use App\Http\Controllers\Expense\ShowExpenseDetailsController;
 use App\Http\Controllers\Expense\ShowExpenseEditController;
 use App\Http\Controllers\Expense\UpdateExpenseController;
@@ -45,7 +46,7 @@ Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('web.da
 Route::get('despesa/{id}', ShowExpenseDetailsController::class)->name('web.expense.details');
 Route::get('despesa/editar/{id}', ShowExpenseEditController::class)->name('web.expenses.edit');
 Route::put('despesa/atualizar/{id}', UpdateExpenseController::class)->name('web.expenses.update');
-Route::delete('despesa/excluir/{id}', ShowExpenseEditController::class)->name('web.expenses.destroy');
+Route::delete('despesa/excluir/{uuid}', DeleteExpenseController::class)->name('web.expenses.destroy');
 
 Route::prefix('api')->group(function () {
     Route::post('expense', CreateExpenseController::class)->name('web.expense.store');

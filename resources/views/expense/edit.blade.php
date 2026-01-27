@@ -320,7 +320,7 @@
                                 </button>
 
                                 <form
-                                    action="{{ route('web.expenses.destroy', ['id' => Crypt::encrypt($expense->id)]) }}"
+                                    action="{{ route('web.expenses.destroy', ['uuid' => Crypt::encrypt($expense->id)]) }}"
                                     method="POST" class="flex-1">
                                     @csrf
                                     @method('DELETE')
