@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\ExpenseController;
+use App\Http\Controllers\Expense\CreateExpenseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Expense\ShowExpenseDetailsController;
+use App\Http\Controllers\Expense\ShowExpenseEditController;
+use App\Http\Controllers\Expense\UpdateExpenseController;
 use App\Mail\User\WelcomeMail;
 use App\Services\ExportService;
 use Illuminate\Support\Facades\Mail;
@@ -38,8 +42,13 @@ Route::get('apoie', function () {
 
 Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('web.dashboard');
 
+Route::get('despesa/{id}', ShowExpenseDetailsController::class)->name('web.expense.details');
+Route::get('despesa/editar/{id}', ShowExpenseEditController::class)->name('web.expenses.edit');
+Route::put('despesa/atualizar/{id}', UpdateExpenseController::class)->name('web.expenses.update');
+Route::delete('despesa/excluir/{id}', ShowExpenseEditController::class)->name('web.expenses.destroy');
+
 Route::prefix('api')->group(function () {
-    Route::post('expense', [ExpenseController::class, 'create'])->name('api.expense.store');
+    Route::post('expense', CreateExpenseController::class)->name('web.expense.store');
     Route::post('login', [AuthController::class, 'login'])->name('api.login');
     Route::post('register', [AuthController::class, 'register'])->name('api.register');
     Route::post('logout', [AuthController::class, 'logout'])->name('api.logout');
