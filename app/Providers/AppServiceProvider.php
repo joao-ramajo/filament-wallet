@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Domain\Uuid;
 use App\Models\Expense;
 use App\Observers\ExpenseObserver;
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\Route;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -21,5 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::bind('uuid', function (string $value) {
+            return new Uuid($value);
+        });
     }
 }
