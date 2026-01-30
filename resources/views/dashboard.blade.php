@@ -417,7 +417,7 @@
                                     <td class="px-4 py-4 text-left">
                                         <span
                                             class="text-lg font-black tabular-nums {{ $expense->type === 'expense' ? 'text-red-400' : 'text-lime-400' }}">
-                                            {{ $expense->type === 'expense' ? '- ' : '+ ' }}R$ {{ $expense->amount }}
+                                            {{ $expense->type === 'expense' ? '- ' : '+ ' }}{{ $expense->amount }}
                                         </span>
                                     </td>
                                 </tr>
@@ -466,7 +466,7 @@
                                 <div class="text-right">
                                     <span
                                         class="text-xl font-black tabular-nums {{ $expense->type === 'expense' ? 'text-red-400' : 'text-lime-400' }}">
-                                        {{ $expense->type === 'expense' ? '- ' : '+ ' }}R$ {{ $expense->amount }}
+                                        {{ $expense->type === 'expense' ? '- ' : '+ ' }}{{ $expense->amount }}
                                     </span>
                                 </div>
                             </div>
