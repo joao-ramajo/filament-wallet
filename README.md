@@ -1,90 +1,199 @@
-# Filament Wallet
-*Laravel 12, Filament 3, MySQL, Sail, Docker*
+# 💰 Fillament Wallet
 
-Um sistema de **gestão pessoal de finanças**, desenvolvido com **Laravel 12** e **Filament 3**, voltado para controle de **despesas, receitas e projeções financeiras**.
-O objetivo é oferecer uma base sólida e escalável para evolução futura — incluindo carteiras, bancos e notificações de vencimento.
+> Um gerenciador de gastos pessoais simples, eficiente e sem complicações
 
-O painel foi inteiramente construído com o **Filament Admin**, permitindo um CRUD completo, dashboards com **estatísticas em tempo real** e visualização clara de saldos e valores projetados.
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com)
+[![Filament](https://img.shields.io/badge/Filament-Admin-F59E0B?style=flat)](https://filamentphp.com)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
----
-
-## 💻 Tecnologias Utilizadas
-
-* Laravel 12
-* PHP 8.3
-* Filament v3
-* Laravel Sail (Docker + MySQL)
+[🔗 Ver Demo ao Vivo](https://fillament-wallet.salgadinhos-web.blog)
 
 ---
 
-## ✨ Funcionalidades
+## 📖 Sobre o Projeto
 
-* Cadastro e autenticação de usuários
-* Registro de **despesas (expenses)** e **receitas (incomes)**
-* Atribuição automática de usuário logado aos registros
-* Separação de valores **pagos** e **pendentes**
-* Cálculo automático de **saldo atual** e **saldo projetado**
-* Dashboard interativo com **estatísticas financeiras**
-* Controle de visibilidade de valores (ocultar/exibir valores monetários)
+**Fillament Wallet** é um gerenciador de gastos pessoais que nasceu da necessidade de ter uma ferramenta **gratuita, simples e confiável** para controle financeiro. Diferente de outros aplicativos disponíveis no mercado, este projeto foca em:
+
+- ✅ **Simplicidade** - Interface limpa sem funcionalidades desnecessárias
+- ✅ **Confiabilidade** - Seus dados sob seu controle
+- ✅ **Experiência focada** - Sem distrações, apenas o essencial para manter suas finanças em dia
+
+### 🎯 Problema Resolvido
+
+Centraliza o controle de saldo e gerencia expectativas financeiras de forma clara, ajudando você a visualizar rapidamente o impacto de cada despesa ou receita no seu orçamento.
+
+### 💡 Por que outro gerenciador de gastos?
+
+A maioria dos aplicativos de controle financeiro sofrem de:
+- Interfaces excessivamente complicadas
+- Questões de segurança e privacidade duvidosas
+- Recursos "empurrados" que prejudicam a experiência
+- Complexidade que desmotiva o uso contínuo
+
+**Fillament Wallet** foi criado para resolver esses problemas, oferecendo apenas o necessário para um controle financeiro efetivo.
 
 ---
 
-## 📊 Estrutura de Dados
+## ✨ Principais Funcionalidades
 
-* **User** → Usuário autenticado
-* **Expense** → Registro de receita ou despesa
+| Funcionalidade | Descrição |
+|----------------|-----------|
+| 📝 **CRUD de Despesas** | Crie, edite, visualize e exclua suas transações financeiras |
+| 📊 **Relatórios Gerais** | Visualize resumos e análises dos seus gastos |
+| 📥 **Importação de Planilhas** | Importe seus dados de gastos via arquivo Excel/CSV |
+| 📤 **Exportação de Dados** | Exporte seus registros para análise externa |
+| 💵 **Controle de Saldo** | Acompanhe saldo atual e projeções futuras em tempo real |
 
-  * `type` → `income` | `expense`
-  * `status` → `paid` | `pending` | `overdue`
-  * `payment_date` → Data de pagamento
-  * `amount` → Valor em centavos (convertido automaticamente para reais via accessor)
+---
 
-Relacionamento:
+## 🛠️ Tecnologias Utilizadas
 
+Este projeto foi construído com tecnologias modernas e confiáveis:
+
+- **Laravel 12** - Framework PHP robusto e elegante
+- **Filament** - Admin panel poderoso para Laravel
+- **Blade Components** - Sistema de templates do Laravel
+- **MySQL** - Banco de dados relacional via Docker
+- **Docker** - Containerização para ambiente consistente
+
+### Arquitetura
+
+- **Tipo**: Monolito server-side
+- **Padrão**: DDD Lite (Domain-Driven Design simplificado)
+- **Stack**: Full-stack Laravel (Frontend + Backend integrados)
+
+---
+
+## 🚀 Como Começar
+
+### Pré-requisitos
+
+Antes de iniciar, certifique-se de ter instalado:
+
+- [Docker](https://www.docker.com/get-started) (para Laravel Sail)
+- [Composer](https://getcomposer.org/) (gerenciador de dependências PHP)
+
+### Instalação
+
+1. **Clone o repositório**
+```bash
+git clone https://github.com/seu-usuario/fillament-wallet.git
+cd fillament-wallet
 ```
-User ───< Expense
+
+2. **Instale as dependências**
+```bash
+composer install
+```
+
+3. **Configure o ambiente**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+4. **Suba os containers Docker**
+```bash
+./vendor/bin/sail up -d
+```
+
+5. **Execute as migrations**
+```bash
+./vendor/bin/sail artisan migrate
+```
+
+6. **Acesse a aplicação**
+```
+http://localhost
+```
+
+### Comandos Úteis
+
+```bash
+# Rodar o projeto em desenvolvimento
+./vendor/bin/sail up -d
+
+# Parar o projeto
+./vendor/bin/sail down
+
+# Executar testes
+./vendor/bin/sail artisan test
+
+# Acessar o container
+./vendor/bin/sail shell
 ```
 
 ---
 
-## 📈 Painel de Estatísticas (Widgets)
+## 💡 Exemplo de Uso
 
-O painel principal exibe **seis indicadores** financeiros atualizados:
+### Caso de Uso Típico
 
-| Categoria   | Métrica               | Descrição                               |
-| ----------- | --------------------- | --------------------------------------- |
-| 💵 Real     | **Total Income**      | Receitas já recebidas                   |
-| 💸 Real     | **Total Expenses**    | Despesas já pagas                       |
-| 💰 Real     | **Current Balance**   | Saldo atual                             |
-| 🔵 Projeção | **Expected Income**   | Receitas pendentes                      |
-| 🟠 Projeção | **Expected Expenses** | Despesas futuras                        |
-| 🧮 Projeção | **Expected Balance**  | Saldo projetado considerando pendências |
+1. **Cadastre uma despesa** (ex: "Compra no supermercado - R$ 150,00")
+2. **Visualize o impacto** no seu saldo atual e saldo projetado
+3. **Acompanhe** como suas entradas e saídas afetam seu orçamento
+4. **Exporte** relatórios quando precisar analisar seus gastos em detalhe
 
-Todos os valores são filtrados automaticamente por usuário autenticado (`user_id`).
-
----
-
-## ⚙️ Integrações e Processos
-
-* **Ambiente Dockerizado com Sail**
-  Inclui containers para `laravel.test`, `mysql` e `phpmyadmin` (porta `8081`).
-* **Conversão automática de valores**
-  Armazena `amount` em centavos e exibe em reais formatados (`R$ 0,00`).
-* **Autenticação via Laravel Sanctum**
-  Cada usuário visualiza apenas seus próprios dados.
-* **Filament Admin**
-  CRUD completo, widgets customizados, `infolists` e componentes responsivos.
-* **Testes com Pest**
-  Cobertura de fluxos principais (cadastro, criação de despesas, políticas de acesso).
+A cada transação registrada, o sistema automaticamente atualiza:
+- Saldo atual
+- Saldo final projetado
+- Relatórios e gráficos
 
 ---
 
-## 🧩 Futuras Expansões
+## 🎨 Design
 
-* [ ] Implementação de **carteiras (wallets)** e contas bancárias
-* [ ] Categorias de despesas e receitas
-* [ ] Lembretes automáticos de vencimento
-* [ ] Exportação para Excel/CSV
-* [ ] Dashboard mensal com gráficos interativos
+O projeto segue um estilo **neo-brutalista**, priorizando:
+- Funcionalidade sobre ornamentação
+- Contraste e legibilidade
+- Elementos visuais diretos e honestos
 
 ---
+
+## 🧪 Testes
+
+O projeto conta com testes básicos para garantir a estabilidade das operações principais.
+
+```bash
+./vendor/bin/sail artisan test
+```
+
+**Nota**: Como as operações são relativamente simples, a cobertura de testes é focada nos fluxos principais, sem necessidade de testes complexos.
+
+---
+
+## 📈 Status do Projeto
+
+**Status Atual**: ✅ MVP em Produção
+
+O projeto está deployado e funcionando em ambiente de produção (VPS), pronto para uso real.
+
+### 🗺️ Roadmap
+
+Funcionalidades planejadas para as próximas versões:
+
+- [ ] Melhorar exportação de planilhas para melhor usabilidade
+- [ ] Implementar envio de relatórios semanais via email
+- [ ] Área de sugestões da comunidade
+- [ ] Dashboard com gráficos interativos
+- [ ] Categorização automática de gastos
+
+---
+
+## 🤝 Contribuições
+
+Contribuições são bem-vindas! Este projeto aceita:
+
+- 💡 **Sugestões de melhorias**
+- 🐛 **Relatos de bugs**
+- 📝 **Melhorias na documentação**
+
+> **Em breve**: Uma área dedicada para sugestões da comunidade será implementada.
+
+---
+
+## 🔗 Links
+
+- **Demo ao vivo**: [https://fillament-wallet.salgadinhos-web.blog](https://fillament-wallet.salgadinhos-web.blog)
+- **Documentação do Laravel**: [https://laravel.com/docs](https://laravel.com/docs)
+- **Documentação do Filament**: [https://filamentphp.com/docs](https://filamentphp.com/docs)
